@@ -39,6 +39,24 @@ class Player():
             return -1
         return 1
 
+    """ This menu will only show which pieces you haven't put on the board yet
+        Need to set it up so that the player can edit pieces already on the board
+    """
+    def display_menu(self):
+        print"Enter the number of the ship you want to add to the board"
+        if len(self.pieces[0].coordinates) == 0:
+            print"1. Aircraft"
+        if len(self.pieces[1].coordinates) == 0:
+            print"2. Battleship"
+        if len(self.pieces[2].coordinates) == 0:
+            print"3. Submarine"
+        if len(self.pieces[3].coordinates) == 0:
+            print"4. Destroyer"
+        if len(self.pieces[4].coordinates) == 0:
+            print"5. Patrol Boat"
+        option = raw_input("Number: ");
+        return option
+
 
 class User(Player):
     def __init__(self, name):
@@ -59,7 +77,7 @@ class User(Player):
     def place_ships(self):
         num_of_ships = 0
         while(num_of_ships < 2):
-            option = raw_input("Enter a number for the ship you'd like to place:\n1: Aircraft Carrer\t*****\n2: BattleShip\t****\n3: Submarine\t***\n4: Destoyer\t***\n5: Patrol Boat\t**\nNumber: ")
+            option = self.display_menu()
             if option == "1":
                 ship = "Aircraft Carrier"
                 times = 5
@@ -81,7 +99,7 @@ class User(Player):
             #look for the correct piece to add the coordinates and get user's coordinates
             for piece in self.pieces:
                 if piece.name == ship:
-                    coordinate = self.getUserCoordinates(times)
+                    coordinate = self.get_user_coordinate(times)
                     #assign the coordinates to that Piece Object
                     piece.assign_coordinates(coordinate)
                     self.player_board.place_pieces_on_board(piece.coordinates, 'user')
@@ -95,7 +113,7 @@ class User(Player):
         Asks for the coordinates in this format: A3
         Returns a list of coordinates for a particular piece
     """
-    def getUserCoordinates(self, times):
+    def get_user_coordinate(self, times):
         valid_input = False
         list_of_coordinates = []
         for number in range(times):
