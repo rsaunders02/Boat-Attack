@@ -3,12 +3,12 @@ from Board import Board
 
 class Player():
     def __init__(self, name):
-        self.name = name            #player name
-        self.wins = 0               #number of wins
-        self.losses = 0             #number of losses
-        self.pieces = []            #a list of Piece objects.
-        self.opponent_board = Board()    #the board the player sees when trying to hit opponent pieces
-        self.player_board = Board() #the board the player sees its own ships
+        self.name = name                 #player name
+        self.wins = 0                    #number of wins
+        self.losses = 0                  #number of losses
+        self.pieces = []                 #a list of Piece objects.
+        self.opponent_board = Board()    #blank board for the player to see where it's hitting
+        self.player_board = Board()      #the Player's board
 
         #set up individual pieces in the Piece object array
         self.pieces.append(Piece("Aircraft Carrier", 5))
@@ -31,27 +31,19 @@ class Player():
         1-10.
         returns: a list of coordinate ['a', 1]
     """
-    def get_coordinates(self):
-        valid_input = 0
-        coordinates = []
+    def check_coordinates(self, coordinates):
         valid_rows = ['a','b','c','d','e','f','g','h','i', 'j']
-        while(valid_input != 2):
-            coordinates = []
-            coordinate = raw_input("Enter a coordinate(ex. A8): ")
-            letter = coordinate[0].lower()
-            number = int(coordinate[1:])
-            if letter in valid_rows:
-                coordinates.append(letter)
-                valid_input+=1
-            else:
-                print "Input a letter A-J"
-            if number > 0 and number < 11:
-                coordinates.append(number)
-                valid_input+=1
-            else:
-                print "Enter a number 1-10"
-        #end of while
-        return coordinates
+        if letter in valid_rows:
+            print "correct"
+        else:
+            print "Input a letter A-J"
+            return -1
+        if number > 0 and number < 11:
+            print "correct"
+        else:
+            print "Enter a number 1-10"
+            return -1
+        return 1
 
 
 class User(Player):
@@ -71,20 +63,20 @@ class User(Player):
         num_of_ships = 0
         ship = ""
         while(num_of_ships < 2):
-            name = raw_input("Enter a number for the ship you'd like to place:\n1: Aircraft Carrer\t*****\n2: BattleShip\t****\n3: Submarine\t***\n4: Destoyer\t***\n5: Patrol Boat\t**\nNumber: ")
-            if name == "1":
+            option = raw_input("Enter a number for the ship you'd like to place:\n1: Aircraft Carrer\t*****\n2: BattleShip\t****\n3: Submarine\t***\n4: Destoyer\t***\n5: Patrol Boat\t**\nNumber: ")
+            if option == "1":
                 ship = "Aircraft Carrier"
                 times = 5
-            elif name == "2":
+            elif option == "2":
                 ship = "Battleship"
                 times = 4
-            elif name == "3":
+            elif option == "3":
                 ship = "Submarine"
                 times = 3
-            elif name == "4":
+            elif option == "4":
                 ship = "Destroyer"
                 times = 3
-            elif name == "5":
+            elif option == "5":
                 ship = "Patrol Boat"
                 times = 2
             else:
@@ -110,11 +102,19 @@ class User(Player):
         Makes sure
     """
     def getUserCoordinates(self, times):
+        valid_input = False
         list_of_coordinates = []
         for x in range(times):
-            coordinates = self.get_coordinates()
-            list_of_coordinates.append(coordinates)
-            valid_input = 0
+            while(valid_input != True):
+                coordinates = []
+                coordinates = raw_input("Enter a coordinate(ex. A8): ")
+                letter = coordinates[0].lower()
+                number = int(coordinates[1:])
+                if(self.check_coordinates(coordinates) == 1):
+                    list_of_coordinates.append(coordinates)
+                    valid_input = True
+            #end while
+        #end for
         return list_of_coordinates
 
     def fire(self):
