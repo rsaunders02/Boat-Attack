@@ -3,12 +3,12 @@ from Board import Board
 
 class Player():
     def __init__(self, name):
-        self.name = name            #player name
-        self.wins = 0               #number of wins
-        self.losses = 0             #number of losses
-        self.pieces = []            #a list of Piece objects.
-        self.opponent_board = Board()    #the board the player sees when trying to hit opponent pieces
-        self.player_board = Board() #the board the player sees its own ships
+        self.name = name                 #player name
+        self.wins = 0                    #number of wins
+        self.losses = 0                  #number of losses
+        self.pieces = []                 #a list of Piece objects.
+        self.opponent_board = Board()    #blank board for the player to see where it's hitting
+        self.player_board = Board()      #the Player's board
 
         #set up individual pieces in the Piece object array
         self.pieces.append(Piece("Aircraft Carrier", 5))
@@ -21,37 +21,41 @@ class Player():
         return 'Name: %s\nWins: %d\nLosses: %d\nNumber of Pieces: %d' % (
         self.name, self.wins, self.losses, len(self.pieces))
 
-    """ This will double check the computer or user's guess
+    """ This method will make sure that the user inputted valid coordinates
+        Column needs to be A-J
+        Row needs to be 1-10
     """
-    def check_guess(self, player):
-        pass
-
-    """ This method will ask the user to enter coordinates. It will make sure
-        that the letter is between A-J and the number is between
-        1-10.
-        returns: a list of coordinate ['a', 1]
-    """
-    def get_coordinates(self):
-        valid_input = 0
-        coordinates = []
+    def check_coordinates(self, coordinate):
         valid_rows = ['a','b','c','d','e','f','g','h','i', 'j']
-        while(valid_input != 2):
-            coordinates = []
-            coordinate = raw_input("Enter a coordinate(ex. A8): ")
-            letter = coordinate[0].lower()
-            number = int(coordinate[1:])
-            if letter in valid_rows:
-                coordinates.append(letter)
-                valid_input+=1
-            else:
-                print "Input a letter A-J"
-            if number > 0 and number < 11:
-                coordinates.append(number)
-                valid_input+=1
-            else:
-                print "Enter a number 1-10"
-        #end of while
-        return coordinates
+        if coordinate[0] in valid_rows:
+            print "correct"
+        else:
+            print "Input a letter A-J"
+            return -1
+        if coordinate[1] > 0 and coordinate[1] < 11:
+            print "correct"
+        else:
+            print "Enter a number 1-10"
+            return -1
+        return 1
+
+    """ This menu will only show which pieces you haven't put on the board yet
+        Need to set it up so that the player can edit pieces already on the board
+    """
+    def display_menu(self):
+        print"Enter the number of the ship you want to add to the board"
+        if len(self.pieces[0].coordinates) == 0:
+            print"1. Aircraft"
+        if len(self.pieces[1].coordinates) == 0:
+            print"2. Battleship"
+        if len(self.pieces[2].coordinates) == 0:
+            print"3. Submarine"
+        if len(self.pieces[3].coordinates) == 0:
+            print"4. Destroyer"
+        if len(self.pieces[4].coordinates) == 0:
+            print"5. Patrol Boat"
+        option = raw_input("Number: ");
+        return option
 
 
 class User(Player):
@@ -59,6 +63,9 @@ class User(Player):
         Player.__init__(self, name)
     def __repr__(self):
         return Player.__repr__(self)
+
+    def print_board(self):
+        self.opponent_board.print_board()
 
 
     """ This method will ask the user what ship they'd like to place so it can assign the coordinates to the right ship
@@ -69,37 +76,34 @@ class User(Player):
     """
     def place_ships(self):
         num_of_ships = 0
-        ship = ""
         while(num_of_ships < 2):
-            name = raw_input("Enter a number for the ship you'd like to place:\n1: Aircraft Carrer\t*****\n2: BattleShip\t****\n3: Submarine\t***\n4: Destoyer\t***\n5: Patrol Boat\t**\nNumber: ")
-            if name == "1":
+            option = self.display_menu()
+            if option == "1":
                 ship = "Aircraft Carrier"
                 times = 5
-            elif name == "2":
+            elif option == "2":
                 ship = "Battleship"
                 times = 4
-            elif name == "3":
+            elif option == "3":
                 ship = "Submarine"
                 times = 3
-            elif name == "4":
+            elif option == "4":
                 ship = "Destroyer"
                 times = 3
-            elif name == "5":
+            elif option == "5":
                 ship = "Patrol Boat"
                 times = 2
             else:
                 print "Input a number 1-5"
                 continue
-            #look for the correct piece to add the coordinates
+            #look for the correct piece to add the coordinates and get user's coordinates
             for piece in self.pieces:
                 if piece.name == ship:
-                    #get coordinates from player
-                    coordinate = self.getUserCoordinates(times)
-                    #assign the coordinates to the piece
+                    coordinate = self.get_user_coordinate(times)
+                    #assign the coordinates to that Piece Object
                     piece.assign_coordinates(coordinate)
                     self.player_board.place_pieces_on_board(piece.coordinates, 'user')
             #end of for loop
-            valid_input = 0
             num_of_ships += 1
         #end of while loop
         self.player_board.print_board()
@@ -107,14 +111,23 @@ class User(Player):
 
     """ Gets the coordinates from the user for their ships.
         Asks for the coordinates in this format: A3
-        Makes sure
+        Returns a list of coordinates for a particular piece
     """
-    def getUserCoordinates(self, times):
+    def get_user_coordinate(self, times):
+        valid_input = False
         list_of_coordinates = []
-        for x in range(times):
-            coordinates = self.get_coordinates()
-            list_of_coordinates.append(coordinates)
-            valid_input = 0
+        for number in range(times):
+            valid_input = False
+            while(valid_input != True):
+                coordinates = []
+                input = raw_input("Enter a coordinate(ex. A8): ")
+                coordinates.append(input[0].lower())
+                coordinates.append(int(input[1:]))
+                if(self.check_coordinates(coordinates) == 1):
+                    list_of_coordinates.append(coordinates)
+                    valid_input = True
+            #end while
+        #end for
         return list_of_coordinates
 
     def fire(self):

@@ -4,6 +4,7 @@ from Player import Computer
 
 player1 = User("Raina")
 print player1
+print player1.print_board()
 computer1 = Computer("Computer1")
 print computer1
 
