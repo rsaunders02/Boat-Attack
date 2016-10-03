@@ -2,9 +2,10 @@ from Player import Player
 from Player import User
 from Player import Computer
 
-player1 = Player("Raina")
+player1 = User("Raina")
 print player1
-computer1 = Player("Computer1")
+print player1.print_board()
+computer1 = Computer("Computer1")
 print computer1
 
 #print player1 ship coordinates
