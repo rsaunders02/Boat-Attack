@@ -27,17 +27,14 @@ class Player():
     """
     def check_coordinates(self, coordinate):
         valid_rows = ['a','b','c','d','e','f','g','h','i', 'j']
-        if coordinate[0] in valid_rows:
-            print "correct"
-        else:
+        if coordinate[0] not in valid_rows:
             print "Input a letter A-J"
             return -1
-        if coordinate[1] > 0 and coordinate[1] < 11:
-            print "correct"
-        else:
-            print "Enter a number 1-10"
+        elif coordinate[1] < 1 or coordinate[1] >= 11:
+            print "Enter a number between 1 and 10"
             return -1
-        return 1
+        else:
+            return 1
 
     """ This menu will only show which pieces you haven't put on the board yet
         Need to set it up so that the player can edit pieces already on the board
@@ -106,7 +103,7 @@ class User(Player):
             #end of for loop
             num_of_ships += 1
         #end of while loop
-        self.player_board.print_board()
+        #self.player_board.print_board()
 
 
     """ Gets the coordinates from the user for their ships.
@@ -134,10 +131,11 @@ class User(Player):
         print "Time to Attack!!!!"
         guess = raw_input("Enter a spot to attack (Ex: A8): ")
         coordinate = []
-        coordinate.append(input[0].lower())
-        coordinate.append(int(input[1:]))
+        coordinate.append(guess[0].lower())
+        coordinate.append(int(guess[1:]))
         if(self.check_coordinates(coordinate)):
-            
+            return coordinate
+        return None
 
 class Computer(Player):
     def __init__(self, name):

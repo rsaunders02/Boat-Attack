@@ -44,7 +44,6 @@ class Board():
                 self.board[self.letters_to_columns.get(item[0])][item[1]] = "C"
                 index += 1
 
-
     """ Prints the board """
     def print_board(self):
         for x in range(11):
