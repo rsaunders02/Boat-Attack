@@ -132,8 +132,12 @@ class User(Player):
 
     def fire(self):
         print "Time to Attack!!!!"
-        #coordinates = self.validate_coordinates()
-        #self.check_guess(coordinates, 'user')
+        guess = raw_input("Enter a spot to attack (Ex: A8): ")
+        coordinate = []
+        coordinate.append(input[0].lower())
+        coordinate.append(int(input[1:]))
+        if(self.check_coordinates(coordinate)):
+            
 
 class Computer(Player):
     def __init__(self, name):
