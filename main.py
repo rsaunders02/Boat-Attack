@@ -12,13 +12,17 @@ print computer1
 user_board = Board()
 computer_board = Board()
 
+#both players place their ships on their respective board
 player1.place_ships()
 computer1.assign_pieces()
 
 user_board = player1.player_board
 computer_board = computer1.player_board
 
+#print the board to double check
+print "User Board"
 user_board.print_board()
+print "Computer Board"
 computer_board.print_board()
 
 """print player1 ship coordinates
@@ -39,5 +43,7 @@ print "pieces[5]: " + str(computer1.pieces[4].coordinates)"""
 for count in range(2):
     coordinate = []
     coordinate = player1.fire()
-    if computer_board.board[2][1] == "C":
-        print "Yay!"
+    if(computer_board.isHit(coordinate) == True):
+        print "Hit!"
+    else:
+        print "Aww nice try"

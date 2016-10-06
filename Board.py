@@ -30,24 +30,23 @@ class Board():
     """
     def place_pieces_on_board(self, coordinates, player):
         number_of_coordinates = len(coordinates)
-        index = 0
         print "coordinates" + str(coordinates)
         if(player == 'user'):
-            for coordinate in range(number_of_coordinates):
-                item = coordinates[coordinate]
+            for index in range(number_of_coordinates):
+                item = coordinates[index]
                 print "item" + str(item)
                 self.board[self.letters_to_columns.get(item[0])][item[1]] = "S"
-                index += 1
         else:
-            for coordinate in range(number_of_coordinates):
-                item = coordinates[coordinate]
+            for index in range(number_of_coordinates):
+                item = coordinates[index]
                 self.board[self.letters_to_columns.get(item[0])][item[1]] = "C"
-                index += 1
 
     """ Prints the board """
     def print_board(self):
         for x in range(11):
             print " ".join(self.board[x])
     """ This method will check to see if the user's guess hits a ship or if it was a miss """
-    def isHit(self):
-        
+    def isHit(self, coordinate):
+        if(self.board[self.letters_to_columns.get(coordinate[0])][coordinate[1]] == "C"):
+            return True
+        return False

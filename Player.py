@@ -133,7 +133,7 @@ class User(Player):
         coordinate = []
         coordinate.append(guess[0].lower())
         coordinate.append(int(guess[1:]))
-        if(self.check_coordinates(coordinate)):
+        if(self.check_coordinates(coordinate) == 1):
             return coordinate
         return None
 
@@ -156,7 +156,6 @@ class Computer(Player):
         self.player_board.place_pieces_on_board(self.pieces[3].get_coordinates(), 'computer')
         self.pieces[4].assign_coordinates([['f', 5], ['g', 5]])
         self.player_board.place_pieces_on_board(self.pieces[4].get_coordinates(), 'computer')
-        self.player_board.print_board()
+        #self.player_board.print_board()
     def fire(self):
         print "Computer, it's time to Attack!!!!"
-        
