@@ -30,11 +30,11 @@ class Board():
     """
     def place_pieces_on_board(self, coordinates, player):
         number_of_coordinates = len(coordinates)
-        print "coordinates" + str(coordinates)
+        #print "coordinates" + str(coordinates)
         if(player == 'user'):
             for index in range(number_of_coordinates):
                 item = coordinates[index]
-                print "item" + str(item)
+                #print "item" + str(item)
                 self.board[self.letters_to_columns.get(item[0])][item[1]] = "S"
         else:
             for index in range(number_of_coordinates):

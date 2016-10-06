@@ -42,8 +42,13 @@ print "pieces[5]: " + str(computer1.pieces[4].coordinates)"""
 
 for count in range(2):
     coordinate = []
-    coordinate = player1.fire()
+    guess, coordinate = player1.fire()
+    print "guess: ", guess
     if(computer_board.isHit(coordinate) == True):
+        piece = computer1.ship_coordinate[guess]
+        piece.hit()
         print "Hit!"
+        if piece.isSunk() == True:
+            print "You sunk my battleship!"
     else:
         print "Aww nice try"
