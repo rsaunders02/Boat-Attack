@@ -48,3 +48,6 @@ class Board():
     def print_board(self):
         for x in range(11):
             print " ".join(self.board[x])
+    """ This method will check to see if the user's guess hits a ship or if it was a miss """
+    def isHit(self):
+        

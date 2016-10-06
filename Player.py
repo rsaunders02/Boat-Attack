@@ -159,3 +159,4 @@ class Computer(Player):
         self.player_board.print_board()
     def fire(self):
         print "Computer, it's time to Attack!!!!"
+        
