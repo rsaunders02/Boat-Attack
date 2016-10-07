@@ -51,4 +51,8 @@ class Board():
             return True
         return False
     def mark(self, coordinate, letter):
-        self.board[self.letters_to_columns.get(coordinate[0])][coordinate[1]] = letter
+        if(self.board[self.letters_to_columns.get(coordinate[0])][coordinate[1]] == letter):
+            return False
+        else:
+            self.board[self.letters_to_columns.get(coordinate[0])][coordinate[1]] = letter
+            return True
