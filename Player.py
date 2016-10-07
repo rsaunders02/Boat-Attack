@@ -9,6 +9,7 @@ class Player():
         self.pieces = []                 #a list of Piece objects.
         self.opponent_board = Board()    #blank board for the player to see where it's hitting
         self.player_board = Board()      #the Player's board
+        self.coordinate_dict= {}        #maps the coordinates to a ship
 
         #set up individual pieces in the Piece object array
         self.pieces.append(Piece("Aircraft Carrier", 5))
@@ -27,17 +28,14 @@ class Player():
     """
     def check_coordinates(self, coordinate):
         valid_rows = ['a','b','c','d','e','f','g','h','i', 'j']
-        if coordinate[0] in valid_rows:
-            print "correct"
-        else:
+        if coordinate[0] not in valid_rows:
             print "Input a letter A-J"
-            return -1
-        if coordinate[1] > 0 and coordinate[1] < 11:
-            print "correct"
+            return False
+        elif coordinate[1] < 1 or coordinate[1] >= 11:
+            print "Enter a number between 1 and 10"
+            return False
         else:
-            print "Enter a number 1-10"
-            return -1
-        return 1
+            return True
 
     """ This menu will only show which pieces you haven't put on the board yet
         Need to set it up so that the player can edit pieces already on the board
@@ -99,31 +97,35 @@ class User(Player):
             #look for the correct piece to add the coordinates and get user's coordinates
             for piece in self.pieces:
                 if piece.name == ship:
-                    coordinate = self.get_user_coordinate(times)
+                    ships_coordinates = self.get_user_coordinate(times, ship, int(option)-1)
                     #assign the coordinates to that Piece Object
-                    piece.assign_coordinates(coordinate)
+                    ships_coordinates.sort()
+                    print "coordinate: ", ships_coordinates
+                    piece.assign_coordinates(ships_coordinates)
                     self.player_board.place_pieces_on_board(piece.coordinates, 'user')
             #end of for loop
             num_of_ships += 1
         #end of while loop
-        self.player_board.print_board()
+        #self.player_board.print_board()
 
 
     """ Gets the coordinates from the user for their ships.
         Asks for the coordinates in this format: A3
         Returns a list of coordinates for a particular piece
     """
-    def get_user_coordinate(self, times):
+    def get_user_coordinate(self, times, ship, index):
         valid_input = False
         list_of_coordinates = []
         for number in range(times):
             valid_input = False
             while(valid_input != True):
                 coordinates = []
-                input = raw_input("Enter a coordinate(ex. A8): ")
-                coordinates.append(input[0].lower())
-                coordinates.append(int(input[1:]))
-                if(self.check_coordinates(coordinates) == 1):
+                user_input = raw_input("Enter a coordinate(ex. A8): ")
+                coordinates.append(user_input[0].lower())
+                coordinates.append(int(user_input[1:]))
+                if(self.check_coordinates(coordinates) == True):
+                    self.coordinate_dict[user_input] = self.pieces[index]   #add to player's dictionary
+                    print "dictionary: ", self.coordinate_dict[user_input].name
                     list_of_coordinates.append(coordinates)
                     valid_input = True
             #end while
@@ -132,8 +134,13 @@ class User(Player):
 
     def fire(self):
         print "Time to Attack!!!!"
-        #coordinates = self.validate_coordinates()
-        #self.check_guess(coordinates, 'user')
+        guess = raw_input("Enter a spot to attack (Ex: A8): ")
+        coordinate = []
+        coordinate.append(guess[0].lower())
+        coordinate.append(int(guess[1:]))
+        if self.check_coordinates(coordinate) == True:
+            return guess, coordinate
+        return None
 
 class Computer(Player):
     def __init__(self, name):
@@ -154,6 +161,9 @@ class Computer(Player):
         self.player_board.place_pieces_on_board(self.pieces[3].get_coordinates(), 'computer')
         self.pieces[4].assign_coordinates([['f', 5], ['g', 5]])
         self.player_board.place_pieces_on_board(self.pieces[4].get_coordinates(), 'computer')
-        self.player_board.print_board()
+        #assign ship_coordinate dictoinary
+        self.coordinate_dict["F5"] = self.pieces[4]
+        self.coordinate_dict["G5"] = self.pieces[4]
+        #self.player_board.print_board()
     def fire(self):
         print "Computer, it's time to Attack!!!!"

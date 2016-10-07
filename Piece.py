@@ -9,3 +9,9 @@ class Piece():
         self.coordinates = coordinates
     def get_coordinates(self):
         return self.coordinates
+    def hit(self):
+        self.size -= 1
+    def isSunk(self):
+        if self.size == 0:
+            return True
+        return False
