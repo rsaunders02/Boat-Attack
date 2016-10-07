@@ -47,6 +47,7 @@ while count < 5:
         if player1.opponent_board.mark(coordinate, "H") == False:
             print "You already guessed there!"
         else:
+            count += 1
             print "Hit!"
             piece = computer1.coordinate_dict[guess]    #grab piece Object that corresponds to that guess
             piece.hit()
