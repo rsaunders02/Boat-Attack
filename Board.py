@@ -1,4 +1,15 @@
+################################################################################
+# This is the Board class. This will be used to display the player's board, see
+# if there's any conflict in placing pieces, will note if a piece has been
+# hit, etc
+
+#Author: Raina
+#Last Updated:
+#Update: N/A
+################################################################################
+
 class Board():
+    ###########################################
     def __init__(self):
         self.board = []
         for row in range(11):
@@ -24,9 +35,10 @@ class Board():
         self.board[8][0] = 'H'
         self.board[9][0] = 'I'
         self.board[10][0] = 'J'
-
+    ###########################################
     """ This method passes the coordinates of a ship to the
         method and places the pieces on the board.
+        @params: list of coordinates and type of user - "user" or "computer"
     """
     def place_pieces_on_board(self, coordinates, player):
         number_of_coordinates = len(coordinates)
@@ -41,15 +53,18 @@ class Board():
                 item = coordinates[index]
                 self.board[self.letters_to_columns.get(item[0])][item[1]] = "C"
 
+    ###########################################
     """ Prints the board """
     def print_board(self):
         for x in range(11):
             print " ".join(self.board[x])
+    ###########################################
     """ This method will check to see if the user's guess hits a ship or if it was a miss """
     def isHit(self, coordinate):
         if(self.board[self.letters_to_columns.get(coordinate[0])][coordinate[1]] == "C"):
             return True
         return False
+    ###########################################
     def mark(self, coordinate, letter):
         if(self.board[self.letters_to_columns.get(coordinate[0])][coordinate[1]] == letter):
             return False

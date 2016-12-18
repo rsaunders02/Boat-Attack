@@ -1,62 +1,54 @@
+################################################################################
+# Boat-Attack is inspired by Battle Ship. It's currently being worked on.
+# The goal is to work with PyGame and create a UI for the game
+
+#Author: Raina
+#Last Updated: 12/17/16
+#Update: changing the sequence of events and organizing code a little better
+#
+################################################################################
+
 from Player import Player
 from Board import Board
 from Player import User
 from Player import Computer
 
-player1 = User("Raina")
-print player1
-computer1 = Computer("Computer1")
-print computer1
-
-#both players place their ships on their respective board
-player1.place_ships()
-computer1.assign_pieces()
-
-"""print the board to double check
-print "Program's board of player 1"
-user_board.print_board()
-print "Program's board of computer's board"
-computer_board.print_board()"""
-print "Player 1's own board"
-player1.player_board.print_board()
-print "Player 1's oppoenent's board"
-player1.opponent_board.print_board()
-
-
-"""print player1 ship coordinates
-print "pieces[0]: " + str(player1.pieces[0].coordinates)
-print "pieces[1]: " + str(player1.pieces[1].coordinates)
-print "pieces[3]: " + str(player1.pieces[2].coordinates)
-print "pieces[4]: " + str(player1.pieces[3].coordinates)
-print "pieces[5]: " + str(player1.pieces[4].coordinates)
-#print computer ship coordinates
-print "pieces[0]: " + str(computer1.pieces[0].coordinates)
-print "pieces[1]: " + str(computer1.pieces[1].coordinates)
-print "pieces[3]: " + str(computer1.pieces[2].coordinates)
-print "pieces[4]: " + str(computer1.pieces[3].coordinates)
-print "pieces[5]: " + str(computer1.pieces[4].coordinates)"""
-
-count = 0
-while count < 5:
-    print "Here. Take a look at your progress"
-    print player1.opponent_board.print_board()
-    coordinate = []
-    guess, coordinate = player1.fire()
-    print "guess: ", guess
-    if guess in computer1.coordinate_dict:
-        if player1.opponent_board.mark(coordinate, "H") == False:
-            print "You already guessed there!"
+#################    Set up       #####################
+################# Set User's Name ##################
+name = raw_input("Enter your name: ")   #gather user's Name
+player1 = User(name)                    #Create player 1 object
+print "------Here is your information------"
+print player1                           #validate correct name and stats
+print "------------------------------------"
+print "Mode: \n1. Player vs Player\n2. Player vs Computer"
+mode = raw_input("Which mode would you like to play in? Enter 1 or 2: ")
+if int(mode) == 1:
+    player1 = User("Unknown")
+else:
+    computer1 = Computer("Computer 1")
+#########################################################
+################# Player sets pieces ####################
+print "-----Place your ships-----"
+set_all_pieces = 0
+while set_all_pieces < 2:
+    print"1. Aircraft\n2. Battleship\n3. Submarine\n4. Destroyer\n5. Patrol Boat"
+    option = raw_input("Enter a number to place that piece: ")
+    option = int(option)
+    if(option < 0 or option > 5):
+        print "Please pick 1-5"
+        continue
+    elif player1.getPiece(option-1).isSet == True:
+        repeat = raw_input("Would you like to reset this piece's coordinates?")
+        if(repeat == "yes"):
+            set_all_pieces -= 1
         else:
-            count += 1
-            print "Hit!"
-            piece = computer1.coordinate_dict[guess]    #grab piece Object that corresponds to that guess
-            piece.hit()
-            player1.opponent_board.mark(coordinate, "H")
-            if piece.isSunk() == True:
-                print "You sunk my battleship!"
-    else:
-        if player1.opponent_board.mark(coordinate, "M") == False:
-            print "You already guessed there!"
-        else:
-            count += 1
-            print "Aww nice try"
+            continue
+    player1.choose_coordinates(option)
+    set_all_pieces += 1
+#########################################################
+########### TEST - print coordaintes and board ##########
+for boat in player1.pieces:
+    print boat.name + ": "
+    print boat.coordinates
+print player1.showOwnBoard()
+#########################################################
